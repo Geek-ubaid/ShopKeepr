@@ -7,8 +7,7 @@ on:
 
 jobs:
   build:
-    ## uses a matrix strategy for tesing on diff combinations
-    runs-on: ${{ matrix.platform }}
+    
     ## to continue the action on failing at some specific platform
     continue-on-error: ${{ matrix.experimental }}
     strategy:
@@ -26,6 +25,9 @@ jobs:
           - python-version : 3.7
             ## exempting this version so that the action dont failed on failing at this job
             experimental : true
+            
+    ## uses a matrix strategy for tesing on diff combinations
+    runs-on: ${{ matrix.platform }}
 
     steps:
       - uses: actions/checkout@v1
