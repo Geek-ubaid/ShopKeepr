@@ -3,7 +3,7 @@ name: Shopkpr cli test
 on:
   ## run only on master branch on every push
   push : 
-    branches : ["master"]
+    branches : ["actions-test"]
 
 jobs:
   build:
@@ -24,13 +24,13 @@ jobs:
         experimental : [false]
         include : 
           - python-version : 3.7
-            platform : ${{matrix.platform}}
+            platform : ${{ matrix.platform }}
             ## exempting this version so that the action dont failed on failing at this job
             experimental : true
 
     steps:
       - uses: actions/checkout@v1
-      
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
         with:
