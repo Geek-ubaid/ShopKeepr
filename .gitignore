@@ -25,6 +25,9 @@ wheels/
 *.egg
 MANIFEST
 
+## Action file
+.github/workflows/testing_cli.yml
+
 ## requirements file
 pkg_scripts/requirements.txt
 
