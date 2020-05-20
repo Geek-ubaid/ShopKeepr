@@ -24,7 +24,6 @@ jobs:
         experimental : [false]
         include : 
           - python-version : 3.7
-            platform : ${{ matrix.platform }}
             ## exempting this version so that the action dont failed on failing at this job
             experimental : true
 
