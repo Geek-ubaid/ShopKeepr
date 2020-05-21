@@ -39,7 +39,7 @@ def activate_env():
             output = result.stdout.decode('utf-8')
             returncode = result.returncode
             if returncode == 0 or 'virtualenv' in output:
-                print('Environment Activated!')
+                print('Environment created!')
 
         else:
             print('virtualenv is not present on your system.\

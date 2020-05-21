@@ -43,7 +43,7 @@ setup(
         include_package_data=True,
         entry_points={
             "console_scripts": [
-                'keepr = keepr.main:run_application'
+                'keepr = keepr.__main__:run_application'
             ]
         },
         classifiers=[
