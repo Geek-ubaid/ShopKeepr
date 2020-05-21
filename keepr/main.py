@@ -1,15 +1,16 @@
 from pathlib import Path
-import sys
+import click
 import os
 
-import click
+import sys
+sys.path.append('keepr')
 
-from keepr.db_management import Database
-from keepr.environment_management import activate_env, deactivate_env
-from keepr.pkg_installation import install_packages, install_requirements
-from keepr.pkg_updation import update_packages
-from keepr.pkg_uninstallation import uninstall_packages
-
+from utils.db_management import Database
+from utils.environment_management import activate_env, deactivate_env
+from utils.pkg_installation import install_packages, install_requirements
+from utils.pkg_updation import update_packages
+from utils.pkg_uninstallation import uninstall_packages
+from utils.misc_functions import is_in_venv
 
 INFORMATION = {
     'name': "shopkeepr",
@@ -25,9 +26,11 @@ class create_db(object):
         database = Database()
         self.engine = database.engine
         self.db = database.packages
-
+        self.environment = is_in_venv()
+        
         if not dbfile.is_file():
             self.db, self.engine = database.initiate_engine()
+        
 
 @click.group(help='A CLI Tool for handling dangling dependencies')
 @click.version_option(INFORMATION['version'])
@@ -64,23 +67,29 @@ def deactivate(ctx):
 @click.pass_context
 def install(ctx,req,packages,update):
     """ install pkg1==1.0 pkg2=1.0 """
-    if req:
-        install_requirements(ctx.obj.db, ctx.obj.engine)
-    elif update:
-        update_packages(packages, ctx.obj.db, ctx.obj.engine)
-    elif packages:
-        install_packages(packages, ctx.obj.db, ctx.obj.engine)
+    if ctx.obj.environment:
+        if req:
+            install_requirements(ctx.obj.db, ctx.obj.engine)
+        elif update:
+            update_packages(packages, ctx.obj.db, ctx.obj.engine)
+        elif packages:
+            install_packages(packages, ctx.obj.db, ctx.obj.engine)
+        else:
+            click.echo("Give the package name to be installed")
     else:
-        click.echo("Give the package name to be installed")
+        click.echo("Activate the environment first before installing packages")
         
-
+        
 @run_application.command(help='Uninstall Packages and dependencies')
 @click.argument('packages', nargs=-1, type=str)
 @click.pass_context
 def uninstall(ctx,packages):
     """ install pkg1==1.0 pkg2=1.0 """
-    uninstall_packages(packages, ctx.obj.db, ctx.obj.engine)
-    
+    if ctx.obj.environment:
+        uninstall_packages(packages, ctx.obj.db, ctx.obj.engine)
+    else:
+        click.echo("Activate the environment first before installing packages")
+
 
 
 if __name__ == "__main__":
