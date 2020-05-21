@@ -3,7 +3,7 @@ from click.testing import CliRunner
 import sys
 sys.path.append('..')
 
-from keepr.main import run_application
+from keepr.__main__ import run_application
 
 def test_activate_env():
     runner = CliRunner()

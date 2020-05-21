@@ -2,15 +2,12 @@ from pathlib import Path
 import click
 import os
 
-import sys
-sys.path.append('keepr')
-
-from utils.db_management import Database
-from utils.environment_management import activate_env, deactivate_env
-from utils.pkg_installation import install_packages, install_requirements
-from utils.pkg_updation import update_packages
-from utils.pkg_uninstallation import uninstall_packages
-from utils.misc_functions import is_in_venv
+from keepr.utils.db_management import Database
+from keepr.utils.environment_management import activate_env, deactivate_env
+from keepr.utils.pkg_installation import install_packages, install_requirements
+from keepr.utils.pkg_updation import update_packages
+from keepr.utils.pkg_uninstallation import uninstall_packages
+from keepr.utils.misc_functions import is_in_venv
 
 INFORMATION = {
     'name': "shopkeepr",
@@ -34,11 +31,11 @@ class create_db(object):
 
 @click.group(help='A CLI Tool for handling dangling dependencies')
 @click.version_option(INFORMATION['version'])
-@click.option('--credits', '-c', nargs=0, help="For showing credits of the project")
+@click.option('--credits', '-c', nargs=0, help="For showing credits of the project", default=False)
 @click.pass_context
 def run_application(ctx, credits):
     if credits:
-        print(
+        click.echo(
             "This application was developed by:",
             "Sameeran Bandishti [sameeranbandishti@ieee.org]",
             "Ayush Priya [ayushpriya10@ieee.org]\n",
@@ -88,9 +85,7 @@ def uninstall(ctx,packages):
     if ctx.obj.environment:
         uninstall_packages(packages, ctx.obj.db, ctx.obj.engine)
     else:
-        click.echo("Activate the environment first before installing packages")
-
-
+        click.echo("Activate the environment first before uninstalling packages")
 
 if __name__ == "__main__":
     run_application()

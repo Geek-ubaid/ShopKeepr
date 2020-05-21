@@ -1,5 +1,6 @@
 import subprocess
 import platform
+import signal
 import sys
 import os
 
@@ -15,21 +16,28 @@ def check_virtualenv_exists():
     except:
         return 0
     
+def run_env_script(script_name, path):
+    try:
+        result = subprocess.run([os.path.join(os.path.dirname(__file__),\
+            'scripts', script_name), path],\
+            stdout=subprocess.PIPE,\
+            stderr=subprocess.PIPE)
+        return result
+    except KeyboardInterrupt:
+        result.send_signal(signal.SIGINT)
+                    
+
 
 def activate_env():
     if not(is_in_venv()):
         if check_virtualenv_exists():
             if platform.system() == 'Windows':
-                result = subprocess.run([os.path.join('scripts', 'activate_env.bat'), r'C:\Users\HP\Desktop\Projects'],\
-                     stdout=subprocess.PIPE,\
-                     stderr=subprocess.PIPE)
+                result = run_env_script('activate_env.bat', os.getcwd())
             else:
-                result = subprocess.run([os.path.join('scripts', 'activate_env.bat')],\
-                     stdout=subprocess.PIPE,\
-                     stderr=subprocess.PIPE)
-                
-                output = result.stdout.decode('utf-8')
-                returncode = result.returncode
+                result = run_env_script('activate_env.sh', os.getcwd())
+
+            output = result.stdout.decode('utf-8')
+            returncode = result.returncode
             if returncode == 0 or 'virtualenv' in output:
                 print('Environment Activated!')
 
