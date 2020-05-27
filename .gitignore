@@ -39,6 +39,9 @@ pkg_scripts/requirements.txt
 *.manifest
 *.spec
 
+## vscode folder
+.vscode
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt

@@ -9,23 +9,23 @@ from .misc_functions import is_in_venv
 
 def check_virtualenv_exists():
     try:
-        process = subprocess.Popen(['virtualenv'], stdout=subprocess.PIPE,\
-             stderr=subprocess.PIPE)
+        process = subprocess.Popen(['virtualenv'], stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
         output, error = process.communicate()
         return 1
-    except:
+    except BaseException:
         return 0
-    
+
+
 def run_env_script(script_name, path):
     try:
-        result = subprocess.run([os.path.join(os.path.dirname(__file__),\
-            'scripts', script_name), path],\
-            stdout=subprocess.PIPE,\
-            stderr=subprocess.PIPE)
+        result = subprocess.run([os.path.join(os.path.dirname(__file__),
+                                              'scripts', script_name), path],
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
         return result
     except KeyboardInterrupt:
         result.send_signal(signal.SIGINT)
-                    
 
 
 def activate_env():
@@ -47,20 +47,7 @@ def activate_env():
             return
     else:
         print("Environment already activated!")
-    
 
-def deactivate_env():
-    status = is_in_venv()
-    if status:
-        print("Deactivating environment...")
-        if platform.system() == 'Windows':
-            subprocess.run(["deactivate"])
-        else:
-            subprocess.run(["deactivate"])
-        print("Environment Deactivated")
-    else:
-        print("No active environments")
-        exit()
 
 if __name__ == "__main__":
     activate_env()
