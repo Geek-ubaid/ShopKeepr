@@ -5,14 +5,6 @@ import sys
 sys.path.append('..')
 
 
-def test_activate_env():
-    runner = CliRunner()
-    result = runner.invoke(run_application, ['activate'])
-    assert 'Environment Activated' in result.output or\
-        'Environment already activated!' in result.output
-    assert result.exit_code == 0
-
-
 def test_install_package():
     runner = CliRunner()
     result = runner.invoke(run_application, ['install', 'click'])
